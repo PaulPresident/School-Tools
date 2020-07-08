@@ -11,19 +11,24 @@ class ReportCardTest(unittest.TestCase):
             Subject(name='CP Geometry', grade=88.99, type='CP'),
             Subject(name='H Biology', grade=92.49, type='H')
         ]
-    def test_has_subjects(self):
+    def test_has_attributes(self):
         subjects = [
             Subject(name='Math', grade=100)
         ]
-        report_card = ReportCard(subjects=subjects)
+        report_card = ReportCard(subjects=subjects, marking_period=1)
 
         self.assertEqual(
             report_card._subjects,
             subjects
         )
 
+        self.assertEqual(
+            report_card._marking_period,
+            'MP1'
+        )
+
     def test_calculates_unweighted_nga(self):
-        report_card = ReportCard(subjects=self.subjects)
+        report_card = ReportCard(subjects=self.subjects, marking_period=1)
 
         self.assertEqual(
             report_card.unweighted_nga(4),
@@ -31,7 +36,7 @@ class ReportCardTest(unittest.TestCase):
         )
 
     def test_calculates_weighted_nga(self):
-        report_card = ReportCard(subjects=self.subjects)
+        report_card = ReportCard(subjects=self.subjects, marking_period=1)
 
         self.assertEqual(
             report_card.weighted_nga(4),
@@ -40,7 +45,7 @@ class ReportCardTest(unittest.TestCase):
 
 
     def test_report_card_string_representation(self):
-        report_card = ReportCard(subjects=self.subjects)
+        report_card = ReportCard(subjects=self.subjects, marking_period=1)
 
         self.assertEqual(
             str(report_card),
@@ -52,6 +57,6 @@ class ReportCardTest(unittest.TestCase):
 |   H Biology                         92   |
 __________________________________________________________
 
-NGA: 93.050
+MP1 NGA: 93.050
 '''
         )

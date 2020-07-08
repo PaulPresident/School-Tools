@@ -53,12 +53,17 @@ class SubjectTest(unittest.TestCase):
             'H Geometry'
         )
 
-    def test_has_public_properties_grade_and_weighted_grade(self):
+    def test_has_public_properties_grade_and_letter_grade_and_weighted_grade(self):
         subject = Subject(name='IB Math Year 1', grade=93.87, type='IB')
 
         self.assertEqual(
             subject.grade,
             94
+        )
+
+        self.assertEqual(
+            subject.letter_grade,
+            'A'
         )
 
         self.assertEqual(

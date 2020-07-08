@@ -6,6 +6,14 @@ class Subject():
         'IB': 1.100,          'International Baccalaureate': 1.100,
     }
 
+    LETTER_GRADES = {
+        'A+': range(97, 101),      'A': range(93, 97),        'A-': range(90, 93),
+        'B+': range(87, 90),       'B': range(83, 87),        'B-': range(80, 83),
+        'C+': range(77, 80),       'C': range(73, 77),        'C-': range(70, 73),
+        'D+': range(67, 70),       'D': range(63, 67),        'D-': range(60, 63),
+        'F': range(0, 60)
+        }
+
     def __init__(self, name, grade, type=None):
         self.name = name
         self._name = name[:]
@@ -25,6 +33,12 @@ class Subject():
     @property
     def grade(self):
         return round(self._grade)
+
+    @property
+    def letter_grade(self):
+        for letter_grade, grade_range in self.LETTER_GRADES.items():
+            if self.grade in grade_range:
+                return letter_grade
 
     @property
     def weighted_grade(self):
