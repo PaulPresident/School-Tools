@@ -43,19 +43,34 @@ class ReportCardTest(unittest.TestCase):
             93.050
         )
 
+    def test_figures_out_earned_honor_roll(self):
+        subjects = [
+            Subject(name='H English 10', grade=95.55, type='H'),
+            Subject(name='H Biology', grade=92.49, type='H')
+        ]
+
+        report_card = ReportCard(subjects=subjects, marking_period=1)
+
+        self.assertEqual(
+            report_card._honor_roll(),
+            'Second Honor Roll'
+        )
 
     def test_report_card_string_representation(self):
         report_card = ReportCard(subjects=self.subjects, marking_period=1)
 
         self.assertEqual(
             str(report_card),
-            '''__________________________________________________________
+            '''
+____________________________________________
 |   Classes                        Grade   |
 |   H English 10                      96   |
 |   AP Modern World History           78   |
 |   CP Geometry                       89   |
 |   H Biology                         92   |
-__________________________________________________________
+____________________________________________
+
+
 
 MP1 NGA: 93.050
 '''

@@ -7,12 +7,20 @@ class Subject():
     }
 
     LETTER_GRADES = {
-        'A+': range(97, 101),      'A': range(93, 97),        'A-': range(90, 93),
-        'B+': range(87, 90),       'B': range(83, 87),        'B-': range(80, 83),
-        'C+': range(77, 80),       'C': range(73, 77),        'C-': range(70, 73),
-        'D+': range(67, 70),       'D': range(63, 67),        'D-': range(60, 63),
-        'F': range(0, 60)
-        }
+        'A+': (97, 101),      'A': (93, 97),        'A-': (90, 93),
+        'B+': (87, 90),       'B': (83, 87),        'B-': (80, 83),
+        'C+': (77, 80),       'C': (73, 77),        'C-': (70, 73),
+        'D+': (67, 70),       'D': (63, 67),        'D-': (60, 63),
+        'F': (0, 60)
+    }
+
+    GPA_POINTS = {
+        'A+': 4.00,         'A': 3.67,          'A-': 3.67,
+        'B+': 3.33,         'B': 3.00,          'B-': 2.67,
+        'C+': 2.33,         'C': 2.00,          'C-': 1.67,
+        'D+': 1.33,         'D': 1.00,          'D-': 0.67,
+        'F': 0.00
+    }
 
     def __init__(self, name, grade, type=None):
         self.name = name
@@ -35,11 +43,18 @@ class Subject():
         return round(self._grade)
 
     @property
-    def letter_grade(self):
-        for letter_grade, grade_range in self.LETTER_GRADES.items():
-            if self.grade in grade_range:
+    def weighted_grade(self):
+        return round(self.grade * self._weight, 3)
+
+    def letter_grade(self, grade):
+        for letter_grade, limit in self.LETTER_GRADES.items():
+            if limit[0] < grade < limit[1]:
                 return letter_grade
 
     @property
-    def weighted_grade(self):
-        return round(self.grade * self._weight, 3)
+    def gpa(self):
+        return self.GPA_POINTS.get(self.letter_grade(self.grade))
+
+    @property
+    def weighted_gpa(self):
+        return self.GPA_POINTS.get(self.letter_grade(self.weighted_grade))

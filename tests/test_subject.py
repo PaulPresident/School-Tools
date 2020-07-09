@@ -62,11 +62,27 @@ class SubjectTest(unittest.TestCase):
         )
 
         self.assertEqual(
-            subject.letter_grade,
+            subject.weighted_grade,
+            103.400
+        )
+
+    def test_figures_out_letter_grade_from_given_grade(self):
+        subject = Subject(name='IB Math Year 1', grade=93.87, type='IB')
+
+        self.assertEqual(
+            subject.letter_grade(subject.grade),
             'A'
         )
 
+    def test_has_public_properties_gpa_and_weighted_gpa(self):
+        subject = Subject(name='H Algebra 2', grade=86.42, type='H')
+
         self.assertEqual(
-            subject.weighted_grade,
-            103.400
+            subject.gpa,
+            3.00
+        )
+
+        self.assertEqual(
+            subject.weighted_gpa,
+            3.67
         )
