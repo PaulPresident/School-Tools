@@ -1,11 +1,4 @@
 class Subject():
-    TYPES = {
-        'CP': 1.000,         'College Prep': 1.000,
-        'H': 1.050,          'Honors': 1.050,
-        'AP': 1.100,          'Advanced Placement': 1.100,
-        'IB': 1.100,          'International Baccalaureate': 1.100,
-    }
-
     LETTER_GRADES = {
         'A+': (97, 101),      'A': (93, 97),        'A-': (90, 93),
         'B+': (87, 90),       'B': (83, 87),        'B-': (80, 83),
@@ -22,15 +15,15 @@ class Subject():
         'F': 0.00
     }
 
-    def __init__(self, name, grade, type=None):
-        self.name = name
+    def __init__(self, name:str, grade:float, full_year:bool=True, weight:float=1.000):
+        self._name = name
         self._name = name[:]
-        self._type = type
-        self._weight = self.TYPES.get(type, 1.000)
+        self.full_year = full_year
+        self.weight = weight
         self._grade = grade
 
     def __str__(self):
-        return self.name
+        return self._name
 
     @property
     def whitespace_name(self):
@@ -44,7 +37,7 @@ class Subject():
 
     @property
     def weighted_grade(self):
-        return round(self.grade * self._weight, 3)
+        return round(self.grade * self.weight, 3)
 
     def letter_grade(self, grade):
         for letter_grade, limit in self.LETTER_GRADES.items():
@@ -58,3 +51,29 @@ class Subject():
     @property
     def weighted_gpa(self):
         return self.GPA_POINTS.get(self.letter_grade(self.weighted_grade))
+
+
+
+    @classmethod
+    def elective(cls, name:str, grade:float):
+        return cls(name=name, grade=grade, weight=0.500, full_year=False)
+
+    @classmethod
+    def language(cls, name:str, grade:float):
+        return cls(name=name, grade=grade)
+
+    @classmethod
+    def college_prep(cls, name:str, grade:float):
+        return cls(name=name, grade=grade)
+
+    @classmethod
+    def honors(cls, name:str, grade:float):
+        return cls(name=name, grade=grade, weight=1.050)
+
+    @classmethod
+    def advanced_placement(cls, name:str, grade:float):
+        return cls(name=name, grade=grade, weight=1.100)
+
+    @classmethod
+    def international_baccalaureate(cls, name:str, grade:float):
+        return cls(name=name, grade=grade, weight=1.100)
