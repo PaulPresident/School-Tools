@@ -9,11 +9,15 @@ class SubjectTest(unittest.TestCase):
         self.assertEqual(subject._name, 'H English 10')
         self.assertEqual(subject._grade, 94.34)
 
-    def test_takes_SubjectType_object_and_unpacks_it_into_full_year_and_weight(self):
-        subject = Subject.advanced_placement(name='AP Calculus BC', grade=89.22)
+# TODO
+    # def test_has_class_methods_for_determining_types(self):
+    #     pass
 
-        self.assertEqual(subject.full_year, True)
-        self.assertEqual(subject.weight, 1.100)
+    # def test_takes_SubjectType_object_and_unpacks_it_into_full_year_and_weight(self):
+    #     subject = Subject.advanced_placement(name='AP Calculus BC', grade=89.22)
+
+    #     self.assertEqual(subject.full_year, True)
+    #     self.assertEqual(subject.weight, 1.100)
 
     def test_has_name_with_whitespace_characters(self):
         subject = Subject.honors(name='H English 10', grade=94.34)
