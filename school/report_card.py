@@ -1,17 +1,13 @@
 class ReportCard():
-    def __init__(self, subjects, marking_period=1):
-        self._subjects = subjects
-        self._marking_period = f'MP{marking_period}'
-
-    def unweighted_nga(self, classes:int):
-        return round(sum([subject.grade for subject in self._subjects]) / classes, 3)
-
-    def weighted_nga(self, classes:int):
-        return round(sum([subject.weighted_grade for subject in self._subjects]) / classes, 3)
+    def __init__(self, marking_periods:list, semesters:tuple=(None, None)):
+        # self.semester1, self.semester2 = semesters
+        self.marking_periods = marking_periods
+        self.last_marking_period = self.marking_periods[-1]
+        self.subjects = self.marking_periods[-1].subjects
 
     def _honor_roll(self):
-        sum_of_gpa = sum([subject.gpa for subject in self._subjects])
-        avg_gpa = sum_of_gpa / len(self._subjects)
+        sum_of_gpa = sum([subject.gpa for subject in self.subjects])
+        avg_gpa = sum_of_gpa / len(self.subjects)
 
         if avg_gpa >= 3.75:
             return 'First Honor Roll'
@@ -20,11 +16,11 @@ class ReportCard():
         return None
 
     def __str__(self):
-        border = '\n____________________________________________\n'
-        report_card = border + '|   Classes                        Grade   |\n'
-        for subject in self._subjects:
+        border = '____________________________________________\n'
+        report_card = f'\n{border}|   Classes                        Grade   |\n'
+        for subject in self.subjects:
             report_card += f'|   {subject.whitespace_name}    {subject.grade}   |\n'
         report_card += border + f'\n\nCongratulations on achieving {self._honor_roll()}' if self._honor_roll() else border + '\n\n\n'
-        report_card += f'{self._marking_period} NGA: {self.weighted_nga(4):.3f}\n'
+        report_card += f'MP{str(self.last_marking_period)} NGA: {self.last_marking_period.weighted_nga:.3f}\n'
 
         return report_card
