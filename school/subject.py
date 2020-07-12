@@ -16,20 +16,13 @@ class Subject():
     }
 
     def __init__(self, name:str, grade:float, full_year:bool=True, weight:float=1.000):
-        self._name = name
-        self._name = name[:]
+        self.name = name
         self.full_year = full_year
-        self.weight = weight
+        self._weight = weight
         self._grade = grade
 
     def __str__(self):
-        return self._name
-
-    @property
-    def whitespace_name(self):
-        while len(self._name) < 30:
-            self._name += ' '
-        return self._name
+        return self.name
 
     @property
     def grade(self):
@@ -37,20 +30,15 @@ class Subject():
 
     @property
     def weighted_grade(self):
-        return round(self.grade * self.weight, 3)
+        return round(self.grade * self._weight, 3)
 
     def letter_grade(self, grade):
         for letter_grade, limit in self.LETTER_GRADES.items():
             if limit[0] < grade < limit[1]:
                 return letter_grade
 
-    @property
-    def gpa(self):
-        return self.GPA_POINTS.get(self.letter_grade(self.grade))
-
-    @property
-    def weighted_gpa(self):
-        return self.GPA_POINTS.get(self.letter_grade(self.weighted_grade))
+    def gpa(self, grade):
+        return self.GPA_POINTS.get(self.letter_grade(grade))
 
 
 

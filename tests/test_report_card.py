@@ -23,6 +23,14 @@ class ReportCardTest(unittest.TestCase):
         self.assertEqual(str(report_card.last_marking_period), '1')
         self.assertEqual(report_card.subjects, self.subjects)
 
+    def test_formats_name_to_have_30_characters(self):
+        subject = Subject.honors(name='H English 10', grade=94.34)
+
+        self.assertEqual(
+            ReportCard.whitespace_name(subject.name),
+            'H English 10                  '
+        )
+
     def test_figures_out_earned_honor_roll(self):
         subjects = [
             Subject.honors(name='H English 10', grade=95.55),
