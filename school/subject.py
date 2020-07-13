@@ -21,6 +21,11 @@ class Subject():
         self._weight = weight
         self._grade = grade
 
+        self.exams = {
+            'midterm': None,
+            'final': None
+        }
+
     def __str__(self):
         return self.name
 
@@ -39,6 +44,29 @@ class Subject():
 
     def gpa(self, grade):
         return self.GPA_POINTS.get(self.letter_grade(grade))
+
+
+    @property
+    def midterm_exam(self):
+        return self.exams['midterm']
+
+    @midterm_exam.setter
+    def midterm_exam(self, score:int):
+        if isinstance(score, int):
+            self.exams['midterm'] = score
+            return
+        raise ValueError('Score has to be an Integer!')
+
+    @property
+    def final_exam(self):
+        return self.exams['final']
+
+    @final_exam.setter
+    def final_exam(self, score:int):
+        if isinstance(score, int):
+            self.exams['final'] = score
+            return
+        raise ValueError('Score has to be an Integer!')
 
 
 

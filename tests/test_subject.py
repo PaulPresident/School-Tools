@@ -36,3 +36,28 @@ class SubjectTest(unittest.TestCase):
 
         self.assertEqual(subject.gpa(subject.grade), 3.00)
         self.assertEqual(subject.gpa(subject.weighted_grade), 3.67)
+
+
+    def test_adds_midterm_exam_score_which_is_also_a_public_property(self):
+        subject = Subject(name='CP Physical Science', grade=85.63)
+        subject.midterm_exam = 87
+
+        self.assertEqual(subject.exams['midterm'], 87)
+
+    def test_raises_value_error_if_score_is_not_an_integer(self):
+        subject = Subject(name='CP Physical Science', grade=85.63)
+
+        with self.assertRaises(ValueError):
+            subject.midterm_exam = 87.49
+
+    def test_adds_final_exam_score_which_is_also_a_public_property(self):
+        subject = Subject(name='CP Physical Science', grade=85.63)
+        subject.final_exam = 91
+
+        self.assertEqual(subject.exams['final'], 91)
+
+    def test_raises_value_error_if_score_is_not_an_integer(self):
+        subject = Subject(name='CP Physical Science', grade=85.63)
+
+        with self.assertRaises(ValueError):
+            subject.final_exam = 91.52
