@@ -1,28 +1,22 @@
-class Semester():
-    def __init__(self, marking_periods:tuple):
-        self.marking_period1, self.marking_period2 = marking_periods
+from dataclasses import dataclass
 
-    def _add_exam_score(self, exam:tuple, exam_type:str):
-        exam_name, score = exam
-        if exam_name not in [subject.name for subject in self.marking_period2.subjects]:
-            raise TypeError(f"{exam} {exam_type} exam does not pretain to any of your classes in the last marking period of this semster.")
-        if not isinstance(score, int): raise ValueError('Score has to be an Integer!')
-        for subject in self.marking_period2.subjects:
-            if exam_name == subject.name:
-                subject.exams[exam_type] = score
+from school.marking_period import MarkingPeriod
 
+@dataclass
+class Semester:
+    _weight: float = 1.000
+    mp1: MarkingPeriod = MarkingPeriod(_weight)
+    mp2: MarkingPeriod = MarkingPeriod(_weight)
+    _exam: int = None
 
+    @property
+    def exam(self):
+        return self._exam
 
-    @classmethod
-    def semester1(cls, marking_periods:tuple, midterm_exams:dict):
-        semester = cls(marking_periods=marking_periods)
-        for exam_name, score in midterm_exams.items():
-            semester._add_exam_score(exam=(exam_name, score), exam_type='midterm')
-        return semester
+    @exam.setter
+    def exam(self, score):
+        self._exam = score
 
-    @classmethod
-    def semester2(cls, marking_periods:tuple, final_exams:dict):
-        semester = cls(marking_periods=marking_periods)
-        for exam_name, score in final_exams.items():
-            semester._add_exam_score(exam=(exam_name, score), exam_type='final')
-        return semester
+    @property
+    def final(self):
+        return round((self.mp1.grade * .4) + (self.mp2.grade * .4) + (self.exam * .2))

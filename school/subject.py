@@ -1,95 +1,47 @@
+from statistics import mean
+
+from school.grade import Grade
+from school.semester import Semester
+
 class Subject():
-    LETTER_GRADES = {
-        'A+': (97, 101),      'A': (93, 97),        'A-': (90, 93),
-        'B+': (87, 90),       'B': (83, 87),        'B-': (80, 83),
-        'C+': (77, 80),       'C': (73, 77),        'C-': (70, 73),
-        'D+': (67, 70),       'D': (63, 67),        'D-': (60, 63),
-        'F': (0, 60)
-    }
-
-    GPA_POINTS = {
-        'A+': 4.00,         'A': 3.67,          'A-': 3.67,
-        'B+': 3.33,         'B': 3.00,          'B-': 2.67,
-        'C+': 2.33,         'C': 2.00,          'C-': 1.67,
-        'D+': 1.33,         'D': 1.00,          'D-': 0.67,
-        'F': 0.00
-    }
-
-    def __init__(self, name:str, grade:float, full_year:bool=True, weight:float=1.000):
+    def __init__(self, name:str, full_year:bool=True, weight:float=1.000):
         self.name = name
-        self.full_year = full_year
+        self._full_year = full_year
+        self.credit = 1.00 if full_year else 0.50
         self._weight = weight
-        self._grade = grade
 
-        self.exams = {
-            'midterm': None,
-            'final': None
-        }
+        self.sem1 = Semester(self._weight)
+        self.sem2 = Semester(self._weight)
 
     def __str__(self):
         return self.name
 
     @property
-    def grade(self):
-        return round(self._grade)
-
-    @property
-    def weighted_grade(self):
-        return round(self.grade * self._weight, 3)
-
-    def letter_grade(self, grade):
-        for letter_grade, limit in self.LETTER_GRADES.items():
-            if limit[0] < grade < limit[1]:
-                return letter_grade
-
-    def gpa(self, grade):
-        return self.GPA_POINTS.get(self.letter_grade(grade))
-
-
-    @property
-    def midterm_exam(self):
-        return self.exams['midterm']
-
-    @midterm_exam.setter
-    def midterm_exam(self, score:int):
-        if isinstance(score, int):
-            self.exams['midterm'] = score
-            return
-        raise ValueError('Score has to be an Integer!')
-
-    @property
-    def final_exam(self):
-        return self.exams['final']
-
-    @final_exam.setter
-    def final_exam(self, score:int):
-        if isinstance(score, int):
-            self.exams['final'] = score
-            return
-        raise ValueError('Score has to be an Integer!')
+    def final(self):
+        return round((self.sem1.final + self.sem2.final) / 2)
 
 
 
     @classmethod
-    def elective(cls, name:str, grade:float):
-        return cls(name=name, grade=grade, weight=0.500, full_year=False)
+    def elective(cls, name:str):
+        return cls(name=name, weight=0.500, full_year=False)
 
     @classmethod
-    def language(cls, name:str, grade:float):
-        return cls(name=name, grade=grade)
+    def language(cls, name:str):
+        return cls(name=name)
 
     @classmethod
-    def college_prep(cls, name:str, grade:float):
-        return cls(name=name, grade=grade)
+    def college_prep(cls, name:str):
+        return cls(name=name)
 
     @classmethod
-    def honors(cls, name:str, grade:float):
-        return cls(name=name, grade=grade, weight=1.050)
+    def honors(cls, name:str):
+        return cls(name=name, weight=1.050)
 
     @classmethod
-    def advanced_placement(cls, name:str, grade:float):
-        return cls(name=name, grade=grade, weight=1.100)
+    def advanced_placement(cls, name:str):
+        return cls(name=name, weight=1.100)
 
     @classmethod
-    def international_baccalaureate(cls, name:str, grade:float):
-        return cls(name=name, grade=grade, weight=1.100)
+    def international_baccalaureate(cls, name:str):
+        return cls(name=name, weight=1.100)
