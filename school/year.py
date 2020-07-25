@@ -1,25 +1,26 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 
 from school.subject import Subject
 
 @dataclass
-class GradeYear:
+class Year:
     year: int
-    subjects: list = []
+    _subjects: List[Subject] = field(default_factory=lambda: [])
 
     @property
     def subjects(self):
-        return self.subjects
+        return self._subjects
 
     def extend_subjects(self, subjects:list):
-        for subject in self.subjects:
+        for subject in subjects:
             if not isinstance(subject, Subject):
                 raise TypeError(f'{subject} is not an object of the Subject Class.')
-        self.subjects.extend(subjects)
+        self._subjects.extend(subjects)
 
-    def remove_subject(self, remove:Subject):
+    def remove_subject(self, remove:str):
         for subject in self.subjects:
             if subject.name == remove:
-                self.subjects.remove(subject)
+                self._subjects.remove(subject)
                 return
         raise LookupError(f'{remove} was not found in the list of subjects.')
