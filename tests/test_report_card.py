@@ -1,69 +1,76 @@
 import unittest
 
 from school.report_card import ReportCard
-from school.marking_period import MarkingPeriod
+from school.year import Year
 from school.subject import Subject
 
 class ReportCardTest(unittest.TestCase):
     def setUp(self):
+        python = Subject.elective(name='Intro to Python')
+        history = Subject.advanced_placement(name='AP Modern World History')
+        english = Subject.honors(name='H English')
+        science = Subject.college_prep(name='CP Biology')
+        math = Subject.honors(name='H Geometry')
+        spanish = Subject.language(name='Spanish 3')
+
+        python.sem1.mp1.grade = 98.07
+        python.sem1.mp2.grade = 99.42
+        history.sem1.mp1.grade = 93.71
+        history.sem1.mp2.grade = 89.29
+        history.sem1.exam = 76
+        english.sem1.mp1.grade = 92.30
+        english.sem1.mp2.grade = 96.85
+        science.sem1.mp1.grade = 95.04
+        science.sem1.mp2.grade = 94.95
+        math.sem1.mp1.grade = 97.34
+        math.sem1.mp2.grade = 99.49
+        spanish.sem1.mp1.grade = 91.72
+        spanish.sem1.mp2.grade = 91.80
+
         self.subjects = [
-            Subject.honors(name='H English 10', grade=95.55),
-            Subject.advanced_placement(name='AP Modern World History', grade=78.24),
-            Subject.college_prep(name='CP Geometry', grade=88.99),
-            Subject.honors(name='H Biology', grade=92.49)
+            python,
+            history,
+            english,
+            science,
+            math,
+            spanish
         ]
 
-        self.marking_periods = [
-            MarkingPeriod.mp1(subjects=self.subjects)
-        ]
+        self.year = Year(year=9)
+        self.year.extend_subjects(subjects=self.subjects)
 
-    def test_has_attributes(self):
-        report_card = ReportCard(marking_periods=self.marking_periods)
+    def test_takes_mp_grade_year(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-        self.assertEqual(str(report_card.last_marking_period), '1')
-        self.assertEqual(report_card.subjects, self.subjects)
+        self.assertEqual(report_card._mp, 2)
+        self.assertIsInstance(report_card._year, Year)
 
-    def test_formats_name_to_have_30_characters(self):
-        subject = Subject.honors(name='H English 10', grade=94.34)
+    def test_has_dict_with_subjects_and_grades_sum_of_credits(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-        self.assertEqual(
-            ReportCard.whitespace_name(subject.name),
-            'H English 10                  '
-        )
+        self.assertEqual(report_card._subjects, self.subjects)
+        self.assertIsInstance(report_card._subject_grades, dict)
+        self.assertEqual(list(report_card._subject_grades.keys()), self.subjects)
+        self.assertEqual(report_card._credits, 5.5)
 
-    def test_figures_out_earned_honor_roll(self):
-        subjects = [
-            Subject.honors(name='H English 10', grade=95.55),
-            Subject.honors(name='H Biology', grade=92.49)
-        ]
+    def test_calculates_unweighted_and_weighted_nga(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-        marking_periods = [
-            MarkingPeriod.mp1(subjects=subjects)
-        ]
+        self.assertEqual(report_card.unweighted_nga, 95.167)
+        self.assertEqual(report_card.weighted_nga, 98.218)
 
-        report_card = ReportCard(marking_periods=marking_periods)
+    def test_calculates_unweighted_and_weighted_gpa(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-        self.assertEqual(
-            report_card._honor_roll(),
-            'Second Honor Roll'
-        )
+        self.assertEqual(report_card.unweighted_gpa, 3.778)
+        self.assertEqual(report_card.weighted_gpa, 4.112)
 
-    def test_report_card_string_representation(self):
-        report_card = ReportCard(marking_periods=self.marking_periods)
+    def test_figures_out_honor_roll(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-        self.assertEqual(
-            str(report_card),
-            '''
-____________________________________________
-|   Classes                        Grade   |
-|   H English 10                      96   |
-|   AP Modern World History           78   |
-|   CP Geometry                       89   |
-|   H Biology                         92   |
-____________________________________________
+        self.assertEqual(report_card.honor_roll, 'First Honor Roll')
 
+    def test_writes_report_card(self):
+        report_card = ReportCard(mp=2, year=self.year)
 
-
-MP1 NGA: 93.050
-'''
-        )
+        report_card.write()

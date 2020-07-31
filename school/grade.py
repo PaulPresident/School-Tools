@@ -15,22 +15,22 @@ class Grade():
         'F': 0.00
     }
 
-    def __init__(self, grade:float=0.00, weight:float=1.000):
-        if not isinstance(grade, float): raise ValueError('Grade has to be a Float with 2 decimal places!')
+    def __init__(self, grade:float=None, weight:float=1.000):
+        if not isinstance(grade, (float, type(None))): raise ValueError('Grade has to be a Float with 2 decimal places!')
         if not isinstance(weight, float): raise ValueError('Weight has to be a Float with 3 decimal places!')
         self._grade = grade
         self._weight = weight
 
     @property
-    def grade(self):
-        return round(self._grade)
+    def unweighted(self):
+        return round(self._grade + 0.001)
 
     @property
-    def weighted_grade(self):
-        return round(self.grade * self._weight)
+    def weighted(self):
+        return round((self.unweighted * self._weight), 3)
 
-    @grade.setter
-    def grade (self, grade):
+    @unweighted.setter
+    def unweighted(self, grade):
         if not isinstance(grade, float): raise ValueError('Grade has to be a Float with 2 decimal places!')
         self._grade = grade
 
@@ -39,5 +39,13 @@ class Grade():
             if limit[0] > grade >= limit[1]:
                 return letter_grade
 
-    def gpa(self, grade):
-        return self.GPA_POINTS.get(self.letter_grade(grade))
+    @property
+    def unweighted_gpa(self):
+        return self.GPA_POINTS.get(self.letter_grade(self.unweighted))
+
+    @property
+    def weighted_gpa(self):
+        if self._weight < 1:
+            return self.unweighted_gpa
+            gpa_weight =(self._weight % 1) * 10
+        return round(self.unweighted_gpa + gpa_weight, 3)

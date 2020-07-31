@@ -1,8 +1,8 @@
 import unittest
 
 from school.subject import Subject
-from school.grade import Grade
 from school.semester import Semester
+from school.marking_period import MarkingPeriod
 
 class SubjectTest(unittest.TestCase):
     def test_takes_name(self):
@@ -28,69 +28,68 @@ class SubjectTest(unittest.TestCase):
         self.assertEqual(subject.credit, 1.00)
         self.assertEqual(elective.credit, 0.50)
 
-    # def test_updates_grade_object_in_grades_list_by_marking_period(self):
-    #     subject = Subject(name='H Geometry')
-    #     subject.update_grade(mp='mp1', grade=95.60)
-
-    #     self.assertIsInstance(subject._grades['mp1'], Grade)
-
-    # def test_stores_all_grades_in_variables_by_their_mp(self):
-    #     subject = Subject(name='H Physical Science')
-    #     subject.update_grade(mp='mp1', grade=95.60)
-    #     subject.update_grade(mp='mp2', grade=98.29)
-
-    #     self.assertEqual(subject.mp1._grade, 95.60)
-    #     self.assertEqual(subject.mp2._grade, 98.29)
-
     def test_creates_sem1_and_sem2_objects(self):
         subject = Subject(name='Intro to Python')
 
         self.assertIsInstance(subject.sem1, Semester)
         self.assertIsInstance(subject.sem2, Semester)
 
+    def test_makes_marking_period_accessible_by_dictionary(self):
+        subject = Subject('H Chemistry')
+
+        self.assertIsInstance(subject.mp[1], MarkingPeriod)
+        self.assertIsInstance(subject.mp[2], MarkingPeriod)
+        self.assertIsInstance(subject.mp[3], MarkingPeriod)
+        self.assertIsInstance(subject.mp[4], MarkingPeriod)
 
     def test_has_public_property_which_calculates_final_grade(self):
-        subject = Subject('Honors')
+        subject = Subject.advanced_placement('AP Chemistry')
+        subject = Subject.elective('AP Chemistry')
+        subject.sem1.mp1.grade = 97.52
+        subject.sem1.mp2.grade = 93.83
+        subject.sem1.exam = 89
+        subject.sem2.mp1.grade = 95.29
+        subject.sem2.mp2.grade = 87.02
+        subject.sem2.exam = 92
 
-    # def test_adds_midterm_exam_score_which_is_also_a_public_property(self):
-    #     subject = Subject(name='CP Physical Science')
-    #     subject.midterm_exam = 87
+        self.assertEqual(subject.final.unweighted, 93)
+        self.assertEqual(subject.final.weighted, 102.3)
 
-    #     self.assertEqual(subject.exams['midterm'], 87)
+    def test_passes_if_final_is_higher_than_60_and_grades_are_complete_with_both_or_neither_of_the_exams(self):
+        subject = Subject('AP Chemistry')
+        subject.sem1.mp1.grade = 97.52
+        subject.sem1.mp2.grade = 93.83
+        subject.sem1.exam = 89
+        subject.sem2.mp1.grade = 95.29
+        subject.sem2.mp2.grade = 87.02
+        subject.sem2.exam = 92
 
-    # def test_raises_value_error_if_score_is_not_an_integer(self):
-    #     subject = Subject(name='CP Physical Science')
+        self.assertEqual(subject.passed, True)
 
-    #     with self.assertRaises(ValueError):
-    #         subject.midterm_exam = 87.49
+    def test_not_passing_if_final_is_lower_than_60(self):
+        subject = Subject('AP Chemistry')
+        subject.sem1.mp1.grade = 50.00
+        subject.sem1.mp2.grade = 50.00
+        subject.sem2.mp1.grade = 50.00
+        subject.sem2.mp2.grade = 50.00
 
-    # def test_adds_final_exam_score_which_is_also_a_public_property(self):
-    #     subject = Subject(name='CP Physical Science')
-    #     subject.final_exam = 91
+        self.assertEqual(subject.passed, False)
 
-    #     self.assertEqual(subject.exams['final'], 91)
+    def test_passed_is_none_if_grades_are_not_complete(self):
+        subject = Subject('AP Chemistry')
+        subject.sem1.mp1.grade = 97.52
+        subject.sem2.mp1.grade = 95.29
+        subject.sem2.mp2.grade = 87.02
 
-    # def test_raises_value_error_if_score_is_not_an_integer(self):
-    #     subject = Subject(name='CP Physical Science')
+        self.assertEqual(subject.passed, None)
 
-    #     with self.assertRaises(ValueError):
-    #         subject.final_exam = 91.52
+# Corona Virus Canceled one of the exams
+    # def test_passed_is_none_if_only_one_of_the_exams(self):
+    #     subject = Subject('AP Chemistry')
+    #     subject.sem1.mp1.grade = 97.52
+    #     subject.sem1.mp2.grade = 93.83
+    #     subject.sem2.mp1.grade = 95.29
+    #     subject.sem2.mp2.grade = 87.02
+    #     subject.sem2.exam = 92
 
-    # def test_calculates_sem1_grade(self):
-    #     subject = Subject('Spanish 3')
-    #     subject.update_grade(mp='mp1', grade=93.85)
-    #     subject.update_grade(mp='mp2', grade=91.03)
-    #     subject.midterm_exam = 89
-
-    #     self.assertEqual(subject.sem1, 92)
-
-    # def test_calculates_final_grade(self):
-    #     subject = Subject('Spanish 3')
-    #     subject.update_grade(mp='mp1', grade=93.85)
-    #     subject.update_grade(mp='mp2', grade=91.03)
-    #     subject.update_grade(mp='mp3', grade=90.02)
-    #     subject.update_grade(mp='mp4', grade=87.48)
-    #     subject.midterm_exam = 89
-    #     subject.final_exam = 92
-
-    #     self.assertEqual(subject.sem1, 91)
+    #     self.assertEqual(subject.passed, None)

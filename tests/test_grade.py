@@ -20,23 +20,23 @@ class GradeTest(unittest.TestCase):
     def test_has_public_properties_grade_and_weighted_grade(self):
         grade = Grade(grade=93.87, weight=1.1)
 
-        self.assertEqual(grade.grade, 94)
-        self.assertEqual(grade.weighted_grade, 103)
+        self.assertEqual(grade.unweighted, 94)
+        self.assertEqual(grade.weighted, 103.4)
 
     def test_allows_for_updating_grade(self):
         grade = Grade(grade=93.87)
-        grade.grade = 87.47
+        grade.unweighted = 87.47
 
-        self.assertEqual(grade.grade, 87)
+        self.assertEqual(grade.unweighted, 87)
 
     def test_figures_out_letter_grade_from_given_grade(self):
         grade = Grade(grade=93.87, weight=1.050)
 
-        self.assertEqual(grade.letter_grade(grade.grade), 'A')
-        self.assertEqual(grade.letter_grade(grade.weighted_grade), 'A+')
+        self.assertEqual(grade.letter_grade(grade.unweighted), 'A')
+        self.assertEqual(grade.letter_grade(grade.weighted), 'A+')
 
     def test_figures_out_gpa_and_weighted_gpa(self):
         grade = Grade(grade=86.42, weight=1.050)
 
-        self.assertEqual(grade.gpa(grade.grade), 3.00)
-        self.assertEqual(grade.gpa(grade.weighted_grade), 3.67)
+        self.assertEqual(grade.unweighted_gpa, 3.00)
+        self.assertEqual(grade.weighted_gpa, 3.500)

@@ -2,6 +2,8 @@ import unittest
 
 from school.student import Student
 from school.year import Year
+from school.report_card import ReportCard
+from school.transcript import Transcript
 
 class StudentTest(unittest.TestCase):
     def test_has_name(self):
@@ -13,10 +15,10 @@ class StudentTest(unittest.TestCase):
 
         self.assertEqual(student._year, 0)
         self.assertEqual(student._mp, 0)
-        self.assertIsNone(student.high_school[9])
-        self.assertIsNone(student.high_school[10])
-        self.assertIsNone(student.high_school[11])
-        self.assertIsNone(student.high_school[12])
+        self.assertIsInstance(student.high_school[9], Year)
+        self.assertIsInstance(student.high_school[10], Year)
+        self.assertIsInstance(student.high_school[11], Year)
+        self.assertIsInstance(student.high_school[12], Year)
 
     def test_updates_mp(self):
         student = Student(name='Cumin')
@@ -36,16 +38,11 @@ class StudentTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             student.mp = 5
 
-    def test_updates_year_and_creates_year_objects_accordingly(self):
+    def test_updates_year(self):
         student = Student(name='Pacman')
-        student.year = 9
-        year9 = student.high_school[9]
         student.year = 10
 
         self.assertEqual(student.year, 10)
-        self.assertIs(student.high_school[9], year9)
-        self.assertIsInstance(student.high_school[10], Year)
-        self.assertIsNone(student.high_school[11])
 
     def test_year_raises_type_error_If_not_int(self):
         student = Student(name='Raccoon')
@@ -57,13 +54,31 @@ class StudentTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             student.year = 8
 
-    def test_year_raises_value_error_if_less_than_previously_recorded_year(self):
-        student = Student(name='Scooter')
-        student.year = 11
+    def test_creates_report_card(self):
+        student = Student(name='Cornelius')
+        student.year = 10
+        student.mp = 2
+
+        self.assertIsInstance(student.report_card(year=9, mp=4), ReportCard)
+
+    def test_raises_value_error_if_requesting_an_unavailable_report_card(self):
+        student = Student(name='MeatMan')
+        student.year = 10
+        student.mp = 3
+
         with self.assertRaises(ValueError):
-            student.year = 9
+            student.report_card(year=11, mp=1)
+            student.report_card(year=10, mp=4)
 
+    def test_creates_transcript(self):
+        student = Student(name='Chris')
+        student.year = 10
 
+        self.assertIsInstance(student.transcript(10), Transcript)
 
+    def test_raises_value_error_if_requesting_an_unavailable_transcript(self):
+        student = Student(name='Robert U Gene GayLord')
+        student.year = 10
 
-
+        with self.assertRaises(ValueError):
+            student.transcript(year=11)

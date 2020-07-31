@@ -1,20 +1,14 @@
-from dataclasses import dataclass
-
 from school.grade import Grade
 
-@dataclass
-class MarkingPeriod:
-    _weight: float = 1.000
-    _grade: Grade = Grade(weight=_weight)
+class MarkingPeriod():
+    def __init__(self, weight:int=1.000):
+        self._weight = 1.000
+        self._grade = Grade(weight=weight)
 
     @property
     def grade(self):
-        return self._grade.grade
-
-    @property
-    def weighted_grade(self):
-        return self._grade.weighted_grade
+        return self._grade
 
     @grade.setter
     def grade(self, grade:float):
-        self._grade.grade = grade
+        self._grade.unweighted = grade
