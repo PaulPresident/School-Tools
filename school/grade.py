@@ -47,5 +47,5 @@ class Grade():
     def weighted_gpa(self):
         if self._weight < 1:
             return self.unweighted_gpa
-            gpa_weight =(self._weight % 1) * 10
+        gpa_weight =(self._weight % 1) * 10
         return round(self.unweighted_gpa + gpa_weight, 3)

@@ -143,10 +143,9 @@ TAG.mp[2].grade = 96.00
 paul.high_school[9].extend_subjects(subjects=subjects9)
 paul.high_school[10].extend_subjects(subjects=subjects10)
 
-# TODO credits don't show with 3 decimal points
 # paul.write_report_card(year=9, mp=4)
 # paul.write_report_card(year=10, mp=4)
 
-# TODO test
-# NOTE run all tests before this one
-paul.write_transcript(year=10)
+# paul.write_transcript(year=10)
+
+# TODO write in specific directory when making compatable with d-bot

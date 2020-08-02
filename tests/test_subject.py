@@ -23,7 +23,7 @@ class SubjectTest(unittest.TestCase):
 
     def test_figures_out_credit_from_subject_type(self):
         subject = Subject.advanced_placement(name='AP Modern World History')
-        elective = Subject.elective(name='Intro to Python')
+        elective = Subject.half_year(name='Intro to Python')
 
         self.assertEqual(subject.credit, 1.00)
         self.assertEqual(elective.credit, 0.50)
@@ -42,9 +42,8 @@ class SubjectTest(unittest.TestCase):
         self.assertIsInstance(subject.mp[3], MarkingPeriod)
         self.assertIsInstance(subject.mp[4], MarkingPeriod)
 
-    def test_has_public_property_which_calculates_final_grade(self):
+    def test_has_public_property_which_calculates_final_grade_when_subject_is_full_year(self):
         subject = Subject.advanced_placement('AP Chemistry')
-        subject = Subject.elective('AP Chemistry')
         subject.sem1.mp1.grade = 97.52
         subject.sem1.mp2.grade = 93.83
         subject.sem1.exam = 89
@@ -54,6 +53,14 @@ class SubjectTest(unittest.TestCase):
 
         self.assertEqual(subject.final.unweighted, 93)
         self.assertEqual(subject.final.weighted, 102.3)
+
+    def test_has_public_property_which_calculates_final_grade_when_subject_is_not_full_year(self):
+        subject = Subject.half_year('CAD1')
+        subject.sem2.mp1.grade = 95.02
+        subject.sem2.mp2.grade = 98.49
+
+        self.assertEqual(subject.final.unweighted, 97)
+        self.assertEqual(subject.final.weighted, 48.5)
 
     def test_passes_if_final_is_higher_than_60_and_grades_are_complete_with_both_or_neither_of_the_exams(self):
         subject = Subject('AP Chemistry')

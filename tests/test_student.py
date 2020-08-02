@@ -1,9 +1,11 @@
 import unittest
+from unittest.mock import MagicMock
 
 from school.student import Student
 from school.year import Year
 from school.report_card import ReportCard
 from school.transcript import Transcript
+from main import paul
 
 class StudentTest(unittest.TestCase):
     def test_has_name(self):

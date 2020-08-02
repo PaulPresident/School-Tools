@@ -6,7 +6,7 @@ from school.subject import Subject
 
 class ReportCardTest(unittest.TestCase):
     def setUp(self):
-        python = Subject.elective(name='Intro to Python')
+        python = Subject.half_year(name='Intro to Python')
         history = Subject.advanced_placement(name='AP Modern World History')
         english = Subject.honors(name='H English')
         science = Subject.college_prep(name='CP Biology')
@@ -45,12 +45,12 @@ class ReportCardTest(unittest.TestCase):
         self.assertEqual(report_card._mp, 2)
         self.assertIsInstance(report_card._year, Year)
 
-    def test_has_dict_with_subjects_and_grades_sum_of_credits(self):
+    def test_creates_lists_of_subjects_and_has_total_credits(self):
         report_card = ReportCard(mp=2, year=self.year)
 
         self.assertEqual(report_card._subjects, self.subjects)
-        self.assertIsInstance(report_card._subject_grades, dict)
-        self.assertEqual(list(report_card._subject_grades.keys()), self.subjects)
+        self.assertEqual(report_card._subjects_in_mp, self.subjects)
+        self.assertEqual(report_card._grades, [subject.mp[2].grade for subject in self.subjects])
         self.assertEqual(report_card._credits, 5.5)
 
     def test_calculates_unweighted_and_weighted_nga(self):
@@ -73,4 +73,4 @@ class ReportCardTest(unittest.TestCase):
     def test_writes_report_card(self):
         report_card = ReportCard(mp=2, year=self.year)
 
-        report_card.write()
+        report_card._test_write()

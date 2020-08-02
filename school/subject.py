@@ -7,7 +7,7 @@ class Subject():
     def __init__(self, name:str, full_year:bool=True, weight:float=1.000):
         self.name = name
         self._full_year = full_year
-        self.credit = 1.00 if full_year else 0.50
+        self.credit = 1.000 if full_year else 0.500
         self._weight = weight
 
         self.sem1 = Semester(weight=weight)
@@ -23,7 +23,6 @@ class Subject():
     def __str__(self):
         return self.name
 
-# TODO test
     @property
     def final(self):
         if self._full_year:
@@ -48,7 +47,6 @@ class Subject():
         except TypeError:
             return None
 
-# TODO test top 3
     @classmethod
     def half_year(cls, name:str):
         return cls(name=name, weight=1.000/2, full_year=False)
@@ -59,6 +57,10 @@ class Subject():
 
     @classmethod
     def half_year_advanced_placement(cls, name:str):
+        return cls(name=name, weight=1.100/2, full_year=False)
+
+    @classmethod
+    def half_year_international_baccalaureate(cls, name:str):
         return cls(name=name, weight=1.100/2, full_year=False)
 
     @classmethod
