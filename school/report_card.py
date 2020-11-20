@@ -63,6 +63,17 @@ class ReportCard():
 # TODO refine
 # I don't like these if's and try's research?
     def _write_exams_final_grades(self, ws, subject):
+        # columns = [5, 9, 6, 10, 11]
+        # values = [subject.sem1.exam, subject.sem2.exam, subject.sem1.final, subject.sem2.final, subject.final.unweighted]
+        # generator = map(lambda col, value: ws.cell(column=col, row=self.ROW, value=value), columns, values)
+
+        # for iteration in generator:
+        #     try:
+        #         next(iteration)
+        #     except TypeError:
+        #         continue
+
+
         if subject.sem1.exam:
             ws.cell(column=5, row=self.ROW, value=subject.sem1.exam)
         if subject.sem2.exam:

@@ -37,11 +37,6 @@ class Subject():
 
     @property
     def passed(self) -> bool:
-        # Corona Virus Canceled one of the exams
-        # if self.sem1.exam == None:
-        #     if self.sem2.exam != None: return None
-        # if self.sem2.exam == None:
-        #     if self.sem1.exam != None: return None
         try:
             return self.final.unweighted >= 60
         except TypeError:
